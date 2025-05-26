@@ -1,1 +1,27 @@
-Hello world!
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>API Magic</title>
+  </head>
+  <body>
+    <h1>Weather Update</h1>
+    <div id="news"></div>
+
+    <script>
+      // Your API URL
+      const apiUrl =
+        'https://newsapi.org/v2/everything?q=tesla&from=2025-04-26&sortBy=publishedAt&apiKey=efcbd73bb99e4f0bb46e29a88ab6a472';
+
+      // Fetch the weather data
+      fetch(apiUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById(
+            'news'
+          ).innerText = `The news is created from ${data.articlesz.author}`;
+        })
+        .catch((error) => console.error('Error:', error));
+    </script>
+  </body>
+</html>
