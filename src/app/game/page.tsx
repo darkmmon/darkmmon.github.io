@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Gameboard from "./gameboard";
-import { createContext, useState } from "react";
 
 
 export default function Home() {

@@ -2,7 +2,7 @@
 
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 function checkLine(array: number[]) {
     const lines = [
@@ -130,7 +130,7 @@ function GameBox({
 }
 
 export default function Gameboard() {
-    const [History, setHistory] = useState("");
+    const [history, setHistory] = useState("");
     const [player, setPlayer] = useState(1);
     const [boxValues, setBoxValues] = useState<number[]>(Array(9).fill(0));
     const [enabledBox, setEnabledBox] = useState(0);
@@ -149,12 +149,13 @@ export default function Gameboard() {
         setPlayer(player === 1 ? 2 : 1);
     }
     useEffect(() => {
+        console.log(history)
         console.log(enabledBox);
         console.log(boxValues);
         if (enabledBox !== 0 && boxValues[enabledBox-1]!==0) {
             updateEnabledBox(enabledBox-1)
         }
-    }, [enabledBox,boxValues]);
+    }, [enabledBox,boxValues, updateEnabledBox, history]);
     function updateEnabledBox(index: number) {
         if (boxValues[index] === 0) {
             setEnabledBox(index+1)
