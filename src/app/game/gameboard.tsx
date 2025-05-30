@@ -1,15 +1,8 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import { createContext, useContext, useState } from "react";
-
-function getCurrentPlayer() {
-    // todo
-    return 1;
-}
+import { createContext, useContext, useEffect, useState } from "react";
 
 function checkLine(array: number[]) {
     const lines = [
@@ -33,14 +26,16 @@ function checkLine(array: number[]) {
 
 function GameSquare({
     value,
+    enabled,
     onClick,
     squareCoordinate,
 }: {
     value: number;
+    enabled: boolean;
     onClick: (coord: string) => void;
     squareCoordinate: string;
 }) {
-    const colors = ["white", "blue", "red"];
+    const colors = ["white", "blue", "red", "gray"];
     const color = colors[value];
     return (
         <Box
@@ -51,7 +46,7 @@ function GameSquare({
                 bgcolor: color,
             }}
             onClick={() => {
-                if (value === 0) onClick(squareCoordinate);
+                if (enabled) onClick(squareCoordinate);
             }}
         />
     );
@@ -64,6 +59,8 @@ function GameBox({
     updateHistory,
     player,
     updatePlayer,
+    enabled,
+    updateEnabledBox,
 }: {
     boxValue: number;
     handleBoxUpdate: (v: number) => void;
@@ -71,6 +68,8 @@ function GameBox({
     updateHistory: (v: string) => void;
     player: number;
     updatePlayer: () => void;
+    enabled: boolean;
+    updateEnabledBox: (v: number) => void;
 }) {
     const handleClick = (i: number, coord: string) => {
         const na = squareValues.slice();
@@ -84,8 +83,14 @@ function GameBox({
         // update history and player order
         updateHistory(coord);
         updatePlayer();
+        updateEnabledBox(i)
     };
     const [squareValues, setSquareValues] = useState(Array(9).fill(0));
+
+    const checkClickable = (enable: boolean, value: number) => {
+        if (value === 0 && enabled) return true;
+        return false;
+    };
 
     if (boxValue === 0) {
         return (
@@ -100,6 +105,7 @@ function GameBox({
                     <Grid size={4} key={i}>
                         <GameSquare
                             value={squareValues[i]}
+                            enabled={checkClickable(enabled, squareValues[i])}
                             onClick={(coord) => handleClick(i, coord)}
                             squareCoordinate={boxNumber.toString() + i}
                         />
@@ -127,6 +133,7 @@ export default function Gameboard() {
     const [History, setHistory] = useState("");
     const [player, setPlayer] = useState(1);
     const [boxValues, setBoxValues] = useState<number[]>(Array(9).fill(0));
+    const [enabledBox, setEnabledBox] = useState(0);
     const handleBoxUpdate = (v: number, i: number) => {
         setBoxValues((a) => {
             const na = a.slice();
@@ -136,34 +143,49 @@ export default function Gameboard() {
     };
 
     function updateHistory(newMove: string) {
-        setHistory(history+newMove)
+        setHistory(history + newMove);
     }
-
     function updatePlayer() {
-        setPlayer((player === 1) ? 2 : 1)
+        setPlayer(player === 1 ? 2 : 1);
+    }
+    useEffect(() => {
+        console.log(enabledBox);
+        console.log(boxValues);
+        if (enabledBox !== 0 && boxValues[enabledBox-1]!==0) {
+            updateEnabledBox(enabledBox-1)
+        }
+    }, [enabledBox,boxValues]);
+    function updateEnabledBox(index: number) {
+        if (boxValues[index] === 0) {
+            setEnabledBox(index+1)
+        } else {
+            setEnabledBox(0)
+        }
     }
 
     return (
-            <Grid
-                container
-                width={"100%"}
-                height={"100%"}
-                rowSpacing={"5%"}
-                columnSpacing={"5%"}
-                className="gameboard"
-            >
-                {[...Array(9).keys()].map((i) => (
-                    <Grid size={4} key={i}>
-                        <GameBox
-                            boxValue={boxValues[i]}
-                            handleBoxUpdate={(v) => handleBoxUpdate(v, i)}
-                            boxNumber={i}
-                            updateHistory={updateHistory}
-                            player={player}
-                            updatePlayer={updatePlayer}
-                        />
-                    </Grid>
-                ))}
-            </Grid>
+        <Grid
+            container
+            width={"100%"}
+            height={"100%"}
+            rowSpacing={"5%"}
+            columnSpacing={"5%"}
+            className="gameboard"
+        >
+            {[...Array(9).keys()].map((i) => (
+                <Grid size={4} key={i}>
+                    <GameBox
+                        boxValue={boxValues[i]}
+                        handleBoxUpdate={(v) => handleBoxUpdate(v, i)}
+                        boxNumber={i}
+                        updateHistory={updateHistory}
+                        player={player}
+                        updatePlayer={updatePlayer}
+                        enabled={enabledBox === i + 1 || enabledBox === 0}
+                        updateEnabledBox={updateEnabledBox}
+                    />
+                </Grid>
+            ))}
+        </Grid>
     );
 }
