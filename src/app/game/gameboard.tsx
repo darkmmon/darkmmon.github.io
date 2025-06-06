@@ -129,7 +129,7 @@ function GameBox({
     }
 }
 
-export default function Gameboard() {
+export default function Gameboard({playerCount} : {playerCount: number}) {
     const [history, setHistory] = useState("");
     const [player, setPlayer] = useState(1);
     const [boxValues, setBoxValues] = useState<number[]>(Array(9).fill(0));
@@ -148,6 +148,15 @@ export default function Gameboard() {
     function updatePlayer() {
         setPlayer(player === 1 ? 2 : 1);
     }
+
+    function randomMove
+
+    useEffect(() => {
+        if (playerCount == 1 && player == 2) {
+            randomMove()
+        } 
+    }, [playerCount, player])
+
     useEffect(() => {
         console.log(history)
         console.log(enabledBox);
