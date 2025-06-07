@@ -3,12 +3,23 @@
 import Image from "next/image";
 import Gameboard from "../gameboard";
 
+function getRandomInt(min:number, max:number) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function randomMove() {
+  const box = getRandomInt(1,9)
+  const square = getRandomInt(1,9)
+  return [box, square]
+}
 
 export default function Home() {
   return (
     <div className="grid grid-rows-[1fr_20px] items-center justify-items-center min-h-screen p-8 gap-16">
       <main className="flex h-[min(95vh,95vw)] w-[min(95vh,95vw)] flex-col items-center sm:items-start">
-        <Gameboard playerCount={1}/>
+        <Gameboard playerCount={1} moveEngine={randomMove}/>
       </main>
       <footer className="row-start-2 flex gap-[24px] flex-wrap items-center justify-center">
         <a

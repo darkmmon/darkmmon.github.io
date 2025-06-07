@@ -28,12 +28,12 @@ function GameSquare({
     value,
     enabled,
     onClick,
-    squareCoordinate,
+    squareNumber,
 }: {
     value: number;
     enabled: boolean;
-    onClick: (coord: string) => void;
-    squareCoordinate: string;
+    onClick: (squareNumber: number) => void;
+    squareNumber: number;
 }) {
     const colors = ["white", "blue", "red", "gray"];
     const color = colors[value];
@@ -46,7 +46,7 @@ function GameSquare({
                 bgcolor: color,
             }}
             onClick={() => {
-                if (enabled) onClick(squareCoordinate);
+                if (enabled) onClick(squareNumber);
             }}
         />
     );
@@ -54,39 +54,17 @@ function GameSquare({
 
 function GameBox({
     boxValue,
-    handleBoxUpdate,
     boxNumber,
-    updateHistory,
-    player,
-    updatePlayer,
+    squareValues,
     enabled,
-    updateEnabledBox,
+    handleClick,
 }: {
     boxValue: number;
-    handleBoxUpdate: (v: number) => void;
     boxNumber: number;
-    updateHistory: (v: string) => void;
-    player: number;
-    updatePlayer: () => void;
+    squareValues: number[];
     enabled: boolean;
-    updateEnabledBox: (v: number) => void;
+    handleClick: (box:number, square:number) => void
 }) {
-    const handleClick = (i: number, coord: string) => {
-        const na = squareValues.slice();
-        na[i] = player;
-        const boxv = checkLine(na);
-        if (boxv) {
-            handleBoxUpdate(boxv);
-        }
-        setSquareValues(na);
-
-        // update history and player order
-        updateHistory(coord);
-        updatePlayer();
-        updateEnabledBox(i)
-    };
-    const [squareValues, setSquareValues] = useState(Array(9).fill(0));
-
     const checkClickable = (enable: boolean, value: number) => {
         if (value === 0 && enabled) return true;
         return false;
@@ -106,8 +84,8 @@ function GameBox({
                         <GameSquare
                             value={squareValues[i]}
                             enabled={checkClickable(enabled, squareValues[i])}
-                            onClick={(coord) => handleClick(i, coord)}
-                            squareCoordinate={boxNumber.toString() + i}
+                            onClick={(squareNumber) => handleClick(boxNumber, squareNumber)}
+                            squareNumber={i}
                         />
                     </Grid>
                 ))}
@@ -129,18 +107,20 @@ function GameBox({
     }
 }
 
-export default function Gameboard({playerCount} : {playerCount: number}) {
+export default function Gameboard({playerCount, moveEngine} : {playerCount: number, moveEngine?: () => number[]}) {
     const [history, setHistory] = useState("");
     const [player, setPlayer] = useState(1);
     const [boxValues, setBoxValues] = useState<number[]>(Array(9).fill(0));
     const [enabledBox, setEnabledBox] = useState(0);
-    const handleBoxUpdate = (v: number, i: number) => {
+    const [squareValues, setSquareValues] = useState([...Array(9)].map(_=>Array(9).fill(0)));
+    const handleBoxWinUpdate = (player: number, box: number) => {
         setBoxValues((a) => {
             const na = a.slice();
-            na[i] = v;
+            na[box] = player;
             return na;
         });
     };
+    
 
     function updateHistory(newMove: string) {
         setHistory(history + newMove);
@@ -148,23 +128,42 @@ export default function Gameboard({playerCount} : {playerCount: number}) {
     function updatePlayer() {
         setPlayer(player === 1 ? 2 : 1);
     }
+    function handleClick(box: number, square: number) {
+        const na = squareValues.slice();
+        na[box][square] = player;
 
-    function randomMove
+        // calculate box win
+        const boxWinPlayer = checkLine(na[box]);
+        if (boxWinPlayer) {
+            handleBoxWinUpdate(boxWinPlayer, box);
+        }
+        setSquareValues(na);
 
+        // update history and player order
+        updateHistory(box.toString()+square);
+        updatePlayer();
+        updateEnabledBox(square)
+    }
+
+    // handle one player auto move
     useEffect(() => {
-        if (playerCount == 1 && player == 2) {
-            randomMove()
+        if (playerCount == 1 && player == 2 && moveEngine) {
+            let [box, square] = moveEngine()
+            if (enabledBox!=0) {
+                box = enabledBox-1
+            }
+            handleClick(box, square)
         } 
-    }, [playerCount, player])
+    }, [playerCount, player, moveEngine])
 
+    // handle edge case where the move would disable the target box while that box's enable is updated
     useEffect(() => {
-        console.log(history)
-        console.log(enabledBox);
-        console.log(boxValues);
         if (enabledBox !== 0 && boxValues[enabledBox-1]!==0) {
             updateEnabledBox(enabledBox-1)
         }
     }, [enabledBox,boxValues, updateEnabledBox, history]);
+
+
     function updateEnabledBox(index: number) {
         if (boxValues[index] === 0) {
             setEnabledBox(index+1)
@@ -186,13 +185,10 @@ export default function Gameboard({playerCount} : {playerCount: number}) {
                 <Grid size={4} key={i}>
                     <GameBox
                         boxValue={boxValues[i]}
-                        handleBoxUpdate={(v) => handleBoxUpdate(v, i)}
                         boxNumber={i}
-                        updateHistory={updateHistory}
-                        player={player}
-                        updatePlayer={updatePlayer}
+                        squareValues={squareValues[i]}
                         enabled={enabledBox === i + 1 || enabledBox === 0}
-                        updateEnabledBox={updateEnabledBox}
+                        handleClick={handleClick}
                     />
                 </Grid>
             ))}
