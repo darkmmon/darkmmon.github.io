@@ -3,6 +3,7 @@
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
+import { getRandomInt } from "./1p/page";
 
 function checkLine(array: number[]) {
     const lines = [
@@ -151,6 +152,14 @@ export default function Gameboard({playerCount, moveEngine} : {playerCount: numb
             let [box, square] = moveEngine()
             if (enabledBox!=0) {
                 box = enabledBox-1
+            }
+            // if move engine give invalid move, random pick another avail square
+            while (squareValues[box][square] != 0){
+                box = getRandomInt(1,9)
+                square = getRandomInt(1,9)
+                if (enabledBox!=0) {
+                    box = enabledBox-1
+                }
             }
             handleClick(box, square)
         } 
