@@ -36,8 +36,9 @@ function GameSquare({
     onClick: (squareNumber: number) => void;
     squareNumber: number;
 }) {
+    const colorValue = enabled ? 0 : value ? value : 3;
     const colors = ["white", "blue", "red", "gray"];
-    const color = colors[value];
+    const color = colors[colorValue];
     return (
         <Box
             width={"min(5vw, 5vh)"}
