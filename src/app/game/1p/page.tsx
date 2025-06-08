@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Gameboard from "../gameboard";
 import {
-    checkLine,
     potentialLineCheck,
     semiCheckLine,
     getRandomInt,
@@ -14,12 +13,12 @@ function randomMove(BoardState: number[][], nextMove: number) {
     if (nextMove == 0) {
         box = getRandomInt(1, 9);
     }
-    const square = getRandomInt(1, 9);
+    let square = getRandomInt(1, 9);
     while (BoardState[box][square] != 0) {
         if (nextMove == 0) {
             box = getRandomInt(1, 9);
         }
-        const square = getRandomInt(1, 9);
+        square = getRandomInt(1, 9);
     }
 
     return [box, square];
@@ -33,16 +32,15 @@ function oneStepMove(BoardState: number[][], nextMove: number) {
         box = nextMove;
         const boxState = BoardState[nextMove - 1];
         // check if the box can be taken
-        let square = potentialLineCheck(boxState);
+        square = potentialLineCheck(boxState);
         if (square != 0) return [box, square];
         // if not, then find a "good" move
         square = semiCheckLine(boxState);
         console.log(square);
         if (square != 0) return [box, square];
     } else {
-        let square: number;
         // prevent error, remove occupied box
-        let fixedBoardState = BoardState.map((value, index) => {
+        const fixedBoardState = BoardState.map((value, index) => {
             if (value.every((v) => v == value[0])) {
                 return { i: index, v: value, skipped: true };
             } else {
@@ -66,6 +64,7 @@ function oneStepMove(BoardState: number[][], nextMove: number) {
         // if nothing then return a random valid move
         return randomMove(BoardState, nextMove);
     }
+    // this should not be reached
     return [box, square];
 }
 

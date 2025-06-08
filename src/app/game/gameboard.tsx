@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { getRandomInt } from "./helper";
 import { checkLine } from "./helper";
 
-
 function GameSquare({
     value,
     enabled,
@@ -105,7 +104,7 @@ export default function Gameboard({
     const [boxValues, setBoxValues] = useState<number[]>(Array(9).fill(0));
     const [enabledBox, setEnabledBox] = useState(0);
     const [squareValues, setSquareValues] = useState<number[][]>(
-        [...Array(9)].map((_) => Array(9).fill(0))
+        [...Array(9)].map((_a) => Array(9).fill(0))
     );
     const handleBoxWinUpdate = (player: number, box: number) => {
         setBoxValues((a) => {
@@ -117,7 +116,7 @@ export default function Gameboard({
             const na = a.slice();
             na[box] = Array(9).fill(player);
             return na;
-        })
+        });
     };
 
     function updateHistory(newMove: string) {
@@ -157,24 +156,24 @@ export default function Gameboard({
             if (enabledBox != 0) {
                 box = enabledBox;
             }
-            console.log(box, square)
+            console.log(box, square);
             // if move engine give invalid move, random pick another avail square
-            while (squareValues[box-1][square-1] != 0) {
+            while (squareValues[box - 1][square - 1] != 0) {
                 box = getRandomInt(1, 9);
                 square = getRandomInt(1, 9);
                 if (enabledBox != 0) {
                     box = enabledBox;
                 }
             }
-            
-            handleClick(box-1, square-1);
+
+            handleClick(box - 1, square - 1);
         }
-    }, [playerCount, player, moveEngine, squareValues]);
+    }, [playerCount, player, moveEngine, squareValues, enabledBox, handleClick]);
 
     // handle edge case where the move would disable the target box while that box's enable is updated
     useEffect(() => {
         if (enabledBox !== 0 && boxValues[enabledBox - 1] !== 0) {
-            updateEnabledBox(enabledBox - 1);
+            updateEnabledBox(0);
         }
     }, [enabledBox, boxValues, updateEnabledBox, history]);
 
