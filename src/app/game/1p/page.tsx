@@ -2,11 +2,7 @@
 
 import Image from "next/image";
 import Gameboard from "../gameboard";
-import {
-    potentialLineCheck,
-    semiCheckLine,
-    getRandomInt,
-} from "../helper";
+import { potentialLineCheck, semiCheckLine, getRandomInt } from "../helper";
 
 function randomMove(BoardState: number[][], nextMove: number) {
     let box = nextMove;
@@ -14,6 +10,7 @@ function randomMove(BoardState: number[][], nextMove: number) {
         box = getRandomInt(1, 9);
     }
     let square = getRandomInt(1, 9);
+    console.log(box, square);
     while (BoardState[box][square] != 0) {
         if (nextMove == 0) {
             box = getRandomInt(1, 9);
@@ -71,7 +68,7 @@ function oneStepMove(BoardState: number[][], nextMove: number) {
 export default function Home() {
     return (
         <div className="grid grid-rows-[1fr_20px] items-center justify-items-center min-h-screen p-8 gap-16">
-            <main className="flex h-[min(95vh,95vw)] w-[min(95vh,95vw)] flex-col items-center sm:items-start">
+            <main className="flex w-[min(95vh,95vw)] flex-col items-center sm:items-start">
                 <Gameboard playerCount={1} moveEngine={oneStepMove} />
             </main>
             <footer className="row-start-2 flex gap-[24px] flex-wrap items-center justify-center">

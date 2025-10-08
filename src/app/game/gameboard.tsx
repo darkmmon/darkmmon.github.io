@@ -2,9 +2,10 @@
 
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { getRandomInt } from "./helper";
 import { checkLine } from "./helper";
+import { Stack } from "@mui/material";
 
 function GameSquare({
     value,
@@ -22,7 +23,8 @@ function GameSquare({
     const color = colors[colorValue];
     return (
         <Box
-            width={"min(5vw, 5vh)"}
+            width={"100%"}
+            height={"100%"}
             sx={{
                 aspectRatio: 1 / 1,
                 borderRadius: 1,
@@ -57,10 +59,12 @@ function GameBox({
         return (
             <Grid
                 container
-                minWidth={"30%"}
-                minHeight={"30%"}
+                width={"100%"}
+                height={"100%"}
                 spacing={2}
                 sx={{ aspectRatio: 1 / 1 }}
+                alignItems="center"
+                justifyContent="space-evenly"
             >
                 {[...Array(9).keys()].map((i) => (
                     <Grid size={4} key={i}>
@@ -106,7 +110,8 @@ export default function Gameboard({
     const [squareValues, setSquareValues] = useState<number[][]>(
         [...Array(9)].map((_a) => Array(9).fill(0))
     );
-    const handleBoxWinUpdate = (player: number, box: number) => {
+    const [winner, setWinner] = useState<number | null>(null);
+    const handleBoxWinUpdate = useCallback((player: number, box: number) => {
         setBoxValues((a) => {
             const na = a.slice();
             na[box] = player;
@@ -117,37 +122,51 @@ export default function Gameboard({
             na[box] = Array(9).fill(player);
             return na;
         });
-    };
+    }, []);
 
-    function updateHistory(newMove: string) {
-        setHistory(history + newMove);
-    }
-    function updatePlayer() {
-        setPlayer(player === 1 ? 2 : 1);
-    }
-    function updateEnabledBox(index: number) {
-        if (boxValues[index] === 0) {
-            setEnabledBox(index + 1);
-        } else {
-            setEnabledBox(0);
-        }
-    }
-    function handleClick(box: number, square: number) {
-        const na = squareValues.slice();
-        na[box][square] = player;
+    const updateHistory = useCallback((newMove: string) => {
+        setHistory((prevHistory) => prevHistory + newMove);
+    }, []);
 
-        // calculate box win
-        const boxWinPlayer = checkLine(na[box]);
-        if (boxWinPlayer) {
-            handleBoxWinUpdate(boxWinPlayer, box);
-        }
-        setSquareValues(na);
+    const updatePlayer = useCallback(() => {
+        setPlayer((prevPlayer) => (prevPlayer === 1 ? 2 : 1));
+    }, []);
+    const updateEnabledBox = useCallback(
+        (index: number) => {
+            if (boxValues[index] === 0) {
+                setEnabledBox(index + 1);
+            } else {
+                setEnabledBox(0);
+            }
+        },
+        [boxValues]
+    );
+    const handleClick = useCallback(
+        (box: number, square: number) => {
+            const na = squareValues.slice();
+            na[box][square] = player;
 
-        // update history and player order
-        updateHistory((box + 1).toString() + (square + 1) + "/");
-        updatePlayer();
-        updateEnabledBox(square);
-    }
+            // calculate box win
+            const boxWinPlayer = checkLine(na[box]);
+            if (boxWinPlayer) {
+                handleBoxWinUpdate(boxWinPlayer, box);
+            }
+            setSquareValues(na);
+
+            // update history and player order
+            updateHistory((box + 1).toString() + (square + 1) + "/ ");
+            updatePlayer();
+            updateEnabledBox(square);
+        },
+        [
+            squareValues,
+            player,
+            updateHistory,
+            updatePlayer,
+            updateEnabledBox,
+            handleBoxWinUpdate,
+        ]
+    );
 
     // handle one player auto move
     useEffect(() => {
@@ -168,7 +187,14 @@ export default function Gameboard({
 
             handleClick(box - 1, square - 1);
         }
-    }, [playerCount, player, moveEngine, squareValues, enabledBox, handleClick]);
+    }, [
+        playerCount,
+        player,
+        moveEngine,
+        squareValues,
+        enabledBox,
+        handleClick,
+    ]);
 
     // handle edge case where the move would disable the target box while that box's enable is updated
     useEffect(() => {
@@ -177,15 +203,51 @@ export default function Gameboard({
         }
     }, [enabledBox, boxValues, updateEnabledBox, history]);
 
-    return (
-        <>
+    // check if the game is over
+    useEffect(() => {
+        const winner = checkLine(boxValues);
+        if (winner !== null) {
+            console.log(`Game over, winner: ${winner}`);
+            setWinner(winner);
+        }
+        if (boxValues.every((value) => value !== 0)) {
+            console.log("Game over, draw");
+            setWinner(0);
+        }
+    }, [boxValues]);
+    return winner !== null ? (
+        <Stack
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+            padding={0}
+            height={"100%"}
+        >
+            <h1
+                style={{
+                    fontSize: "2rem",
+                    color:
+                        winner === 0 ? "gray" : winner === 1 ? "blue" : "red",
+                }}
+            >
+                Game over, winner: {winner}
+            </h1>
+        </Stack>
+    ) : (
+        <Stack
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+            padding={0}
+            height={"100%"}
+        >
             <Grid
                 container
                 width={"100%"}
                 height={"100%"}
-                rowSpacing={"5%"}
-                columnSpacing={"5%"}
+                spacing={5}
                 className="gameboard"
+                sx={{ bgcolor: "black" }}
             >
                 {[...Array(9).keys()].map((i) => (
                     <Grid size={4} key={i}>
@@ -199,7 +261,9 @@ export default function Gameboard({
                     </Grid>
                 ))}
             </Grid>
-            {history}
-        </>
+            <Box width={"50vw"}>
+                <p style={{ textWrap: "stable" }}>History: {history}</p>
+            </Box>
+        </Stack>
     );
 }
