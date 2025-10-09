@@ -6,6 +6,7 @@ import { useEffect, useState, useCallback } from "react";
 import { getRandomInt } from "./helper";
 import { checkLine } from "./helper";
 import { Stack } from "@mui/material";
+import {player } from './type'
 
 function GameSquare({
     value,
@@ -104,7 +105,7 @@ export default function Gameboard({
     moveEngine?: (gameState: number[][], nextMove: number) => number[];
 }) {
     const [history, setHistory] = useState("");
-    const [player, setPlayer] = useState(1);
+    const [player, setPlayer] = useState<player>(1);
     const [boxValues, setBoxValues] = useState<number[]>(Array(9).fill(0));
     const [enabledBox, setEnabledBox] = useState(0);
     const [squareValues, setSquareValues] = useState<number[][]>(
@@ -261,7 +262,7 @@ export default function Gameboard({
                     </Grid>
                 ))}
             </Grid>
-            <Box width={"50vw"}>
+            <Box width={"100%"}>
                 <p style={{ textWrap: "stable" }}>History: {history}</p>
             </Box>
         </Stack>

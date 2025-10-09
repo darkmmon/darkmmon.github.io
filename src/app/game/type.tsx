@@ -1,0 +1,1 @@
+export type player = 1 | 2;
