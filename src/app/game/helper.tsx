@@ -94,6 +94,7 @@ export function potentialLineCheck(boxState: number[]) {
 
 // give +ve value if player 1 is winning
 export function evaluator(BoardState: number[][], nextMove: number, player: player) {
+    
     // util values for easier computation
     const boxState = BoardState.map(Box => Box.every((v) => v==Box[0]) ? Box[0] : 0)
     let score = 0
@@ -117,8 +118,8 @@ export function evaluator(BoardState: number[][], nextMove: number, player: play
     // 3. extra score for two boxes connected 
     const player1WinningBox = semiCheckLine(boxState, 1)
     const player2WinningBox = semiCheckLine(boxState, 2)
-    score += boxWeight * player1WinningBox.length 
-    score -= boxWeight * player2WinningBox.length
+    score += 5*boxWeight * player1WinningBox.length 
+    score -= 5*boxWeight * player2WinningBox.length
 
     // dynamic weight for added preference based on game state
     const gridWeight = [3,2,3,2,4,2,3,2,3]
@@ -142,7 +143,7 @@ export function evaluator(BoardState: number[][], nextMove: number, player: play
     for (let i = 0; i < 9; i++) {
         if (boxState[i] == 0) {
             score += squareWeight * semiCheckLine(BoardState[i], 1).length * gridWeight[i]
-            score += squareWeight * semiCheckLine(BoardState[i], 2).length * gridWeight[i]
+            score -= squareWeight * semiCheckLine(BoardState[i], 2).length * gridWeight[i]
         }
     }
 

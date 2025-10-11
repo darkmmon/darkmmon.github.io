@@ -144,6 +144,7 @@ export default function Gameboard({
     );
     const handleClick = useCallback(
         (box: number, square: number) => {
+            console.log("game step:", history.length/4)
             const na = squareValues.slice();
             na[box][square] = player;
 

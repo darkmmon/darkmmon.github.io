@@ -80,7 +80,7 @@ function minimax(BoardState: number[][], nextMove: number, depth: number, player
     if (winner == 1) {
         return {value: Number.POSITIVE_INFINITY, move: [1,1]}
     } else if (winner == 2) {
-        return {value: Number.POSITIVE_INFINITY, move: [1,1]}
+        return {value: Number.NEGATIVE_INFINITY, move: [1,1]}
     }
     
     if (depth <= 0) {
@@ -97,10 +97,9 @@ function minimax(BoardState: number[][], nextMove: number, depth: number, player
                 // // pass empty array into update states, since we don't care box state here
                 const newBoardState = updateStatesOnMove([moveidx, i], player, BoardState)
                 const moveValue = minimax(newBoardState, checkNextMove(newBoardState, i), depth-1, player == 1 ? 2: 1).value;
-                // if (depth == 3) {
-
-                //     console.log('bestMove updated', [nextMove, i+1], moveValue)
-                // }
+                if (depth == 4) {
+                    console.log('bestMove updated', [nextMove, i+1], moveValue)
+                }
                 if (player == 1 ? moveValue > bestMoveValue : moveValue < bestMoveValue) {
                     bestMove = [nextMove, i+1]
                     bestMoveValue = moveValue
@@ -132,7 +131,7 @@ function minimax(BoardState: number[][], nextMove: number, depth: number, player
 function minimaxEngine(boardState: number[][], nextMove: number){
     console.log("engine receive", boardState, nextMove)
     const result = minimax(boardState, nextMove, 4, 2)
-    console.log("final", result)
+    console.log("final", result.move, result.value)
     return result.move
 }
 
