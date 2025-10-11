@@ -7,7 +7,7 @@ export function updateStatesOnMove(
     BoardState: number[][]
 ) : number[][] {
     
-    let newBoardState = BoardState.map((v) => v.map(v => v))
+    const newBoardState = BoardState.map((v) => v.map(v => v))
     newBoardState[move[0]][move[1]] = player
     if (checkLine(newBoardState[move[0]])) {
         newBoardState[move[0]] = Array(9).fill(player)

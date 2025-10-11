@@ -171,6 +171,7 @@ export default function Gameboard({
         }
         },
         [
+            boxValues, 
             squareValues,
             player,
             updateHistory,
@@ -202,6 +203,8 @@ export default function Gameboard({
             handleClick(box - 1, square - 1);
         }
     }, [
+        boxValues,
+        winner,
         playerCount,
         player,
         moveEngine,

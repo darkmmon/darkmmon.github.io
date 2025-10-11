@@ -1,11 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Gameboard from "../gameboard";
 import { potentialLineCheck, semiFindLine, getRandomInt, evaluator, checkLine } from "../helper";
 import {player} from '../type'
 import { updateStatesOnMove } from "../util";
-import { Onest } from "next/font/google";
 
 function randomMove(BoardState: number[][], nextMove: number) {
     let box = nextMove;
@@ -24,7 +22,7 @@ function randomMove(BoardState: number[][], nextMove: number) {
     return [box, square];
 }
 
-function oneStepMove(BoardState: number[][], nextMove: number) {
+function _oneStepMove(BoardState: number[][], nextMove: number) {
     let box = nextMove;
     let square: number = 0;
     if (nextMove != 0) {

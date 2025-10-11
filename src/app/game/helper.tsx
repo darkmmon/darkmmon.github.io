@@ -29,7 +29,7 @@ export function checkLine(array: number[]) {
 function semiCheckLine(array: number[], player: player) : number[] {
     const a = [...array]
     const wonPlayer = checkLine(a)
-    let potentialSquare : number[] = []
+    const potentialSquare : number[] = []
     if (wonPlayer) return [1,2,3,4,5,6,7,8,9];
     for (let i = 0; i < 9; i++) {
         if (a[i] == 0) {
