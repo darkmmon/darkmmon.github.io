@@ -81,8 +81,8 @@ function GameBox({
                 ))}
             </Grid>
         );
-    } else if (boxValue === 1 || boxValue === 2) {
-        const colors = ["white", "blue", "red"];
+    } else {
+        const colors = ["white", "blue", "red", "grey"];
         const color = colors[boxValue];
         return (
             <Box
@@ -149,8 +149,11 @@ export default function Gameboard({
 
             // calculate box win
             const boxWinPlayer = checkLine(na[box]);
+            const boxDraw = na[box].every(v => v)
             if (boxWinPlayer) {
                 handleBoxWinUpdate(boxWinPlayer, box);
+            } else if (boxDraw) {
+                handleBoxWinUpdate(3, box)
             } else {
                 setSquareValues(na);
             }
