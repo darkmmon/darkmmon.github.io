@@ -151,13 +151,24 @@ export default function Gameboard({
             const boxWinPlayer = checkLine(na[box]);
             if (boxWinPlayer) {
                 handleBoxWinUpdate(boxWinPlayer, box);
+            } else {
+                setSquareValues(na);
             }
-            setSquareValues(na);
 
             // update history and player order
             updateHistory((box + 1).toString() + (square + 1) + "/ ");
             updatePlayer();
             updateEnabledBox(square);
+
+            const winner = checkLine(boxValues.map((v, idx) => (idx == box && boxWinPlayer) ? boxWinPlayer : v));
+            if (winner !== null) {
+                console.log(`Game over, winner: ${winner}`);
+                setWinner(winner);
+            }
+            if (boxValues.every((value) => value !== 0)) {
+                console.log("Game over, draw");
+                setWinner(0);
+        }
         },
         [
             squareValues,
@@ -171,18 +182,20 @@ export default function Gameboard({
 
     // handle one player auto move
     useEffect(() => {
-        if (playerCount == 1 && player == 2 && moveEngine) {
-            let [box, square] = moveEngine(squareValues, enabledBox);
-            if (enabledBox != 0) {
-                box = enabledBox;
+        if (playerCount == 1 && player == 2 && moveEngine && !winner) {
+            const newenabledBox = enabledBox !== 0 && boxValues[enabledBox - 1] !== 0 ? 0 : enabledBox
+            console.log("effect",squareValues, newenabledBox)
+            let [box, square] = moveEngine(squareValues, newenabledBox);
+            if (newenabledBox != 0) {
+                box = newenabledBox;
             }
             console.log(box, square);
             // if move engine give invalid move, random pick another avail square
             while (squareValues[box - 1][square - 1] != 0) {
                 box = getRandomInt(1, 9);
                 square = getRandomInt(1, 9);
-                if (enabledBox != 0) {
-                    box = enabledBox;
+                if (newenabledBox != 0) {
+                    box = newenabledBox;
                 }
             }
 
@@ -204,18 +217,6 @@ export default function Gameboard({
         }
     }, [enabledBox, boxValues, updateEnabledBox, history]);
 
-    // check if the game is over
-    useEffect(() => {
-        const winner = checkLine(boxValues);
-        if (winner !== null) {
-            console.log(`Game over, winner: ${winner}`);
-            setWinner(winner);
-        }
-        if (boxValues.every((value) => value !== 0)) {
-            console.log("Game over, draw");
-            setWinner(0);
-        }
-    }, [boxValues]);
     return winner !== null ? (
         <Stack
             direction="column"
@@ -231,8 +232,11 @@ export default function Gameboard({
                         winner === 0 ? "gray" : winner === 1 ? "blue" : "red",
                 }}
             >
-                Game over, winner: {winner}
+                Game over, winner: {winner} 
             </h1>
+            <p>
+                history : {history}
+            </p>
         </Stack>
     ) : (
         <Stack

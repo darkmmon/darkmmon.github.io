@@ -118,19 +118,20 @@ export function evaluator(BoardState: number[][], nextMove: number, player: play
     score += boxWeight * semiCheckLine(boxState, 1).length 
     score -= boxWeight * semiCheckLine(boxState, 2).length
 
+    const gridWeight = [3,2,3,2,4,2,3,2,3]
     // 4. count square level
-    const squareWeight = 5
     for (let i = 0; i < 9; i++) {
         if (boxState[i] == 0) {
-            score += squareWeight * tictactoeEvaluator(BoardState[i])
+            score += tictactoeEvaluator(BoardState[i]) * gridWeight[i]
         }
     }
 
+    const squareWeight = 5
     // 5. extra score for two square connected
     for (let i = 0; i < 9; i++) {
         if (boxState[i] == 0) {
-            score += squareWeight * semiCheckLine(BoardState[i], 1).length
-            score += squareWeight * semiCheckLine(BoardState[i], 2).length
+            score += squareWeight * semiCheckLine(BoardState[i], 1).length * gridWeight[i]
+            score += squareWeight * semiCheckLine(BoardState[i], 2).length * gridWeight[i]
         }
     }
 
@@ -139,7 +140,7 @@ export function evaluator(BoardState: number[][], nextMove: number, player: play
 
 function tictactoeEvaluator(box: number[]) {
     // give points based on individual square only
-    const gridWeight = [1,2,1,2,4,2,1,2,1]
+    const gridWeight = [3,2,3,2,4,2,3,2,3]
     let score = 0
     for (let i = 0; i < 9; i++) {
         score += box[i] == 1 ? gridWeight[i] : box[i] == 2 ? -gridWeight[i] : 0
