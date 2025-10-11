@@ -115,10 +115,21 @@ export function evaluator(BoardState: number[][], nextMove: number, player: play
     score += boxWeight * tictactoeEvaluator(boxState)
 
     // 3. extra score for two boxes connected 
-    score += boxWeight * semiCheckLine(boxState, 1).length 
-    score -= boxWeight * semiCheckLine(boxState, 2).length
+    const player1WinningBox = semiCheckLine(boxState, 1)
+    const player2WinningBox = semiCheckLine(boxState, 2)
+    score += boxWeight * player1WinningBox.length 
+    score -= boxWeight * player2WinningBox.length
 
+    // dynamic weight for added preference based on game state
     const gridWeight = [3,2,3,2,4,2,3,2,3]
+    for (let i of player1WinningBox) {
+        gridWeight[i] += 2
+    }
+    for (let i of player2WinningBox) {
+        gridWeight[i] += 2
+    }
+
+
     // 4. count square level
     for (let i = 0; i < 9; i++) {
         if (boxState[i] == 0) {
