@@ -8,6 +8,7 @@ import Button from '../components/ui/button';
 import Link from 'next/link';
 import Header from './components/header';
 import Text from '@/components/ui/text';
+import AnimatedHello from './components/AnimatedHello';
 
 type Project = {
   title: string;
@@ -18,11 +19,10 @@ type Project = {
 
 const projects: Project[] = [
   {
-    title: 'Minimal Chess Trainer',
-    description:
-      'Practice key endgames and tactics with a lightweight trainer and hint system.',
-    tags: ['React', 'Typescript', 'AI'],
-    url: '#',
+    title: 'Super Tic Tac Toe',
+    description: 'Play with your friends, or against a bot!',
+    tags: ['React', 'Typescript'],
+    url: '/game',
   },
   {
     title: 'Blog Theme (Next.js)',
@@ -43,6 +43,7 @@ export default function Page() {
   return (
     <Container>
       <div className="h-[100vh] w-full item-center content-center">
+        <AnimatedHello />
         <InfoBox />
       </div>
 
