@@ -33,7 +33,7 @@ const projects: Project[] = [
   },
   {
     title: 'Interactive Portfolio',
-    description: 'This live portfolio page — responsive and easy to adapt.',
+    description: "This live portfolio page. It's amazing, right?",
     tags: ['Design', 'UX'],
     url: '#',
   },
@@ -47,7 +47,7 @@ export default function Page() {
         <InfoBox />
       </div>
 
-      <Section title="Selected projects" subtitle="Recent work & experiments">
+      <Section title="Selected projects">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((p) => (
             <Card
@@ -98,7 +98,7 @@ export default function Page() {
       <Section title="Say hi">
         <Card className="p-6">
           <Text className="text-slate-600 mb-4">
-            I'm interested in curious front-end work and small product
+            I&apos;m interested in curious front-end work and small product
             experiments. Email me at{' '}
             <a href="mailto:hello@example.com" className="text-teal-600">
               hello@example.com

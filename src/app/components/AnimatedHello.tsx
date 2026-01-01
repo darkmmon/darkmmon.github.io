@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { Easing, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 export default function AnimatedHello() {
@@ -20,7 +20,7 @@ export default function AnimatedHello() {
       opacity: 1,
       transition: {
         duration: 2,
-        ease: 'easeInOut',
+        ease: 'Easing' as Easing,
       },
     },
   };
