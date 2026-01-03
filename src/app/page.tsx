@@ -9,7 +9,7 @@ import Link from 'next/link';
 import Header from './components/header';
 import Text from '@/components/ui/text';
 import AnimatedHello from './components/AnimatedHello';
-
+import ChatBox from '@/app/components/ChatBox';
 type Project = {
   title: string;
   description: string;
@@ -45,6 +45,7 @@ export default function Page() {
       <div className="h-[100vh] w-full item-center content-center">
         <AnimatedHello />
         <InfoBox />
+        <ChatBox />
       </div>
 
       <Section title="Selected projects">

@@ -20,7 +20,7 @@ export default function AnimatedHello() {
       opacity: 1,
       transition: {
         duration: 2,
-        ease: 'Easing' as Easing,
+        ease: 'easeIn' as Easing,
       },
     },
   };
