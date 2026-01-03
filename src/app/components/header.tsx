@@ -12,11 +12,16 @@ export default function Header() {
               <Text>View projects</Text>
             </Button>
           </Link>
-          <a href="mailto:hello@example.com">
+          <Link href="mailto:hello@example.com">
             <Button variant="ghost">
               <Text>Contact</Text>
             </Button>
-          </a>
+          </Link>
+          <Link href="/chat">
+            <Button variant="ghost">
+              <Text>Chat</Text>
+            </Button>
+          </Link>
         </div>
         <div>
           <div className="text-xs dark:text-white text-gray-700">Theme</div>

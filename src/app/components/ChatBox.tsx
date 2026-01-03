@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Cohere, CohereClientV2 } from 'cohere-ai';
+import Card from '@/components/ui/card';
 
 interface Message {
   id: string;
@@ -17,6 +18,7 @@ export default function ChatBox() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const processedRef = useRef(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -26,14 +28,39 @@ export default function ChatBox() {
     scrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    // Check for initial prompt in URL (e.g., ?prompt=hello)
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const prompt = params.get('prompt');
+
+    if (prompt && !processedRef.current) {
+      processedRef.current = true;
+      // remove the prompt param to prevent re-sending
+      const url = new URL(window.location.href);
+      url.searchParams.delete('prompt');
+      window.history.replaceState({}, '', url.toString());
+      // send the initial prompt
+      sendPrompt(prompt);
+      // if there's a hash to scroll to, respect it
+      if (window.location.hash) {
+        const el = document.querySelector(window.location.hash);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
+    await sendPrompt(input);
+  };
 
+  const sendPrompt = async (text: string) => {
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: input,
+      content: text,
     };
 
     setMessages((prev) => [...prev, userMessage]);
@@ -78,11 +105,11 @@ export default function ChatBox() {
   };
 
   return (
-    <div className="flex flex-col h-[300px] max-w-2xl mx-auto bg-blue-100 rounded-lg shadow-lg overflow-hidden">
+    <Card id="chat" className="flex flex-col h-full bg-gray-100 ">
       {/* Messages Container */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 ? (
-          <div className="flex items-center justify-center h-full text-gray-400">
+          <div className="flex items-center justify-center h-full">
             <p>Start a conversation...</p>
           </div>
         ) : (
@@ -116,7 +143,7 @@ export default function ChatBox() {
       </div>
 
       {/* Input Form */}
-      <div className="border-t border-gray-300 p-4 bg-gray-50">
+      <div className="border-t border-gray-300 p-4">
         <form onSubmit={handleSubmit} className="flex gap-2">
           <input
             value={input}
@@ -134,6 +161,6 @@ export default function ChatBox() {
           </button>
         </form>
       </div>
-    </div>
+    </Card>
   );
 }

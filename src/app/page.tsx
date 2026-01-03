@@ -6,10 +6,10 @@ import Badge from '../components/ui/badge';
 import InfoBox from './components/InfoBox';
 import Button from '../components/ui/button';
 import Link from 'next/link';
-import Header from './components/header';
+import Header from './components/Header';
 import Text from '@/components/ui/text';
 import AnimatedHello from './components/AnimatedHello';
-import ChatBox from '@/app/components/ChatBox';
+import PromptBox from '@/app/components/PromptBox';
 type Project = {
   title: string;
   description: string;
@@ -41,11 +41,11 @@ const projects: Project[] = [
 
 export default function Page() {
   return (
-    <Container>
-      <div className="h-[100vh] w-full item-center content-center">
+    <>
+      <div className="h-[calc(100vh-120px)] w-full item-center content-center">
         <AnimatedHello />
         <InfoBox />
-        <ChatBox />
+        <PromptBox />
       </div>
 
       <Section title="Selected projects">
@@ -125,6 +125,6 @@ export default function Page() {
       <footer className="mt-12 py-6 border-t border-slate-100 text-sm text-slate-500">
         © {new Date().getFullYear()} Darkmmon — built with Next.js
       </footer>
-    </Container>
+    </>
   );
 }
