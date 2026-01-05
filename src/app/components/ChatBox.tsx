@@ -3,11 +3,19 @@
 import { useState, useRef, useEffect } from 'react';
 import { Cohere, CohereClientV2 } from 'cohere-ai';
 import Card from '@/components/ui/card';
+import { loadDocuments, formatDocumentsForRAG } from '@/lib/documentLoader';
 
 interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
+}
+
+interface Document {
+  data: {
+    title: string;
+    snippet: string;
+  };
 }
 
 export default function ChatBox() {
@@ -17,6 +25,7 @@ export default function ChatBox() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [documents, setDocuments] = useState<Document[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const processedRef = useRef(false);
 
@@ -27,6 +36,15 @@ export default function ChatBox() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Load documents on component mount
+  useEffect(() => {
+    const initializeDocuments = async () => {
+      const loadedDocs = await loadDocuments();
+      setDocuments(formatDocumentsForRAG(loadedDocs));
+    };
+    initializeDocuments();
+  }, []);
 
   useEffect(() => {
     // Check for initial prompt in URL (e.g., ?prompt=hello)
@@ -69,13 +87,22 @@ export default function ChatBox() {
 
     try {
       const messageToSend = [...messages, userMessage];
-      const response = await cohere.chat({
+
+      // Prepare the API request with RAG documents
+      const requestData: Record<string, any> = {
         model: 'command-r-08-2024',
         messages: messageToSend.map((msg) => ({
           role: msg.role === 'user' ? 'user' : 'assistant',
           content: msg.content,
         })),
-      });
+      };
+
+      // Add documents to the request if they exist
+      if (documents && documents.length > 0) {
+        requestData.documents = documents;
+      }
+
+      const response = await cohere.chat(requestData);
 
       if (!response.message) {
         throw new Error(`Cohere API error: ${response.finishReason}`);
