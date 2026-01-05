@@ -89,7 +89,7 @@ export default function ChatBox() {
       const messageToSend = [...messages, userMessage];
 
       // Prepare the API request with RAG documents
-      const requestData: Record<string, any> = {
+      const requestData: Cohere.v2.V2ChatRequest = {
         model: 'command-r-08-2024',
         messages: messageToSend.map((msg) => ({
           role: msg.role === 'user' ? 'user' : 'assistant',
