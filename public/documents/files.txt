@@ -1,2 +1,1 @@
-example.txt
-product_guide.txt
+introduction.txt

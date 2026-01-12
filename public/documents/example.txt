@@ -1,4 +1,0 @@
-This is an example document that will be used as knowledge base for the chatbot.
-You can add more documents in the public/documents folder as text files.
-Each document will be automatically loaded and used as context when generating responses.
-This enables Retrieval-Augmented Generation (RAG) where the chatbot can reference and cite these documents in its responses.
