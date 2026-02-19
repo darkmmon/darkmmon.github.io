@@ -6,6 +6,14 @@ export default function Header() {
   return (
     <header className="pt-8 pb-8 fixed w-full">
       <div className="flex flex-row justify-around w-full">
+        <div className="flex items-center">
+          <Link href="/">
+            <div className="flex items-center space-x-2 cursor-pointer">
+              <span className="font-mono text-lg dark:text-white text-gray-800">{'<'} / {'>'}</span>
+              <span className="font-mono text-sm dark:text-white text-gray-800">darkmmon</span>
+            </div>
+          </Link>
+        </div>
         <div>
           <Link href="https://github.com/darkmmon">
             <Button variant="ghost">
@@ -20,6 +28,11 @@ export default function Header() {
           <Link href="/chat">
             <Button variant="ghost">
               <Text>Chat</Text>
+            </Button>
+          </Link>
+          <Link href="/blog">
+            <Button variant="ghost">
+              <Text>Blog</Text>
             </Button>
           </Link>
         </div>
