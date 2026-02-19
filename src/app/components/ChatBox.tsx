@@ -112,7 +112,9 @@ Remember to:
 - Maintain a positive, growth-oriented tone
 - Reference specific technical skills when relevant
 - Demonstrate both technical depth and collaborative spirit
-- Show enthusiasm for AI/ML and solving real-world problems`;
+- Show enthusiasm for AI/ML and solving real-world problems
+
+Finally, DO NOT make up any false information, only mention things that are mentioned, NO made-up projects or knowledge about my potential field to explore.`;
 
       // Prepare the API request with RAG documents
       const requestData: Cohere.v2.V2ChatRequest = {

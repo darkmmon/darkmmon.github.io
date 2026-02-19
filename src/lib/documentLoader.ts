@@ -23,7 +23,10 @@ export async function loadDocuments(): Promise<Document[]> {
     const fileNames = filesList
       .split('\n')
       .map((line) => line.trim())
-      .filter((line) => line.length > 0 && line.endsWith('.txt'));
+      .filter(
+        (line) =>
+          line.length > 0 && (line.endsWith('.txt') || line.endsWith('.md')),
+      );
 
     const documents: Document[] = [];
 
@@ -32,6 +35,7 @@ export async function loadDocuments(): Promise<Document[]> {
       try {
         const docResponse = await fetch(`/documents/${fileName}`);
         if (docResponse.ok) {
+          console.log(`reading documents ${fileName}`);
           const content = await docResponse.text();
           documents.push({
             id: `doc:${documents.length}`,
