@@ -9,8 +9,12 @@ export default function Header() {
         <div className="flex items-center">
           <Link href="/">
             <div className="flex items-center space-x-2 cursor-pointer">
-              <span className="font-mono text-lg dark:text-white text-gray-800">{'<'} / {'>'}</span>
-              <span className="font-mono text-sm dark:text-white text-gray-800">darkmmon</span>
+              <span className="font-mono text-lg dark:text-white text-gray-800">
+                {'<'} / {'>'}
+              </span>
+              <span className="font-mono text-sm dark:text-white text-gray-800">
+                darkmmon
+              </span>
             </div>
           </Link>
         </div>
@@ -20,7 +24,7 @@ export default function Header() {
               <Text>View projects</Text>
             </Button>
           </Link>
-          <Link href="mailto:hello@example.com">
+          <Link href="mailto:ivanyiutin@gmail.com">
             <Button variant="ghost">
               <Text>Contact</Text>
             </Button>

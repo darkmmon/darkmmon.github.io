@@ -101,8 +101,8 @@ export default function Page() {
           <Text className="text-slate-600 mb-4">
             I&apos;m interested in curious front-end work and small product
             experiments. Email me at{' '}
-            <a href="mailto:hello@example.com" className="text-teal-600">
-              hello@example.com
+            <a href="mailto:ivanyiutin@gmail.com" className="text-teal-600">
+              ivanyiutin@gmail.com
             </a>{' '}
             or find me on{' '}
             <a href="#" className="text-teal-600">
@@ -112,7 +112,7 @@ export default function Page() {
           </Text>
 
           <div className="flex gap-3">
-            <Link href="mailto:hello@example.com">
+            <Link href="mailto:ivanyiutin@gmail.com">
               <Button>Contact</Button>
             </Link>
             <Link href="https://github.com/darkmmon">
