@@ -11,22 +11,16 @@ export default function ContactPage() {
         </p>
 
         <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-2">Email</h2>
-          <p className="mb-4">
-            Prefer email? Send a message to{' '}
-            <a
-              className="text-blue-600 dark:text-blue-400 underline"
-              href="mailto:ivanyiutin@gmail.com"
-            >
-              ivanyiutin@gmail.com
-            </a>
-            .
-          </p>
-        </section>
-
-        <section className="mb-8">
           <h2 className="text-xl font-semibold mb-2">Connect</h2>
           <ul className="space-y-2 list-none p-0">
+            <li>
+              <a
+                className="text-blue-600 dark:text-blue-400 underline"
+                href="mailto:ivanyiutin@gmail.com"
+              >
+                Email - ivanyiutin@gmail.com
+              </a>
+            </li>
             <li>
               <a
                 className="text-blue-600 dark:text-blue-400 underline"
@@ -53,7 +47,7 @@ export default function ContactPage() {
             </li> */}
             <li>
               <a
-                className="text-blue-600 dark:text-blue-400 underline"
+                className="text-blue-600 dark:text-blue-400 under line"
                 href="https://discord.com/users/ilv_Rem"
               >
                 Discord — darkmmon
@@ -73,9 +67,6 @@ export default function ContactPage() {
               GitHub
             </a>
             .
-          </p>
-          <p>
-            Go back <Link href="/">home</Link>.
           </p>
         </section>
       </div>
