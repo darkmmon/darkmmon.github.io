@@ -38,19 +38,19 @@ export default function ContactPage() {
             <li>
               <a
                 className="text-blue-600 dark:text-blue-400 underline"
-                href="https://www.linkedin.com/in/your-linkedin"
+                href="https://www.linkedin.com/in/ivan-yiu-69105727b/"
               >
-                LinkedIn — your-linkedin
+                LinkedIn — Ivan Yiu
               </a>
             </li>
-            <li>
+            {/* <li>
               <a
                 className="text-blue-600 dark:text-blue-400 underline"
                 href="https://instagram.com/yourhandle"
               >
                 Instagram — @yourhandle
               </a>
-            </li>
+            </li> */}
             <li>
               <a
                 className="text-blue-600 dark:text-blue-400 underline"
