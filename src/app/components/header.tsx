@@ -24,7 +24,7 @@ export default function Header() {
               <Text>View projects</Text>
             </Button>
           </Link>
-          <Link href="mailto:ivanyiutin@gmail.com">
+          <Link href="/contact">
             <Button variant="ghost">
               <Text>Contact</Text>
             </Button>
