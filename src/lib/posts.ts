@@ -1,7 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { serialize } from 'next-mdx-remote/serialize';
+
+export type PostFrontmatter = {
+  title?: string;
+  date?: string;
+  tags?: string[];
+  [key: string]: unknown;
+};
 
 const postsDirectory = path.join(process.cwd(), 'src', 'content', 'posts');
 
@@ -23,7 +29,7 @@ export function getAllPosts() {
     const { data, content: body } = matter(content);
     return {
       slug,
-      frontmatter: data as Record<string, any>,
+      frontmatter: data as PostFrontmatter,
       excerpt: body.substring(0, 300),
     };
   });
@@ -36,7 +42,11 @@ export function getAllPosts() {
   return posts;
 }
 
-export async function getPostBySlug(slug: string) {
+export async function getPostBySlug(slug: string): Promise<{
+  slug: string;
+  frontmatter: PostFrontmatter;
+  body: string;
+}> {
   const mdxPath = path.join(postsDirectory, `${slug}.mdx`);
   const mdPath = path.join(postsDirectory, `${slug}.md`);
   const fullPath = fs.existsSync(mdxPath) ? mdxPath : mdPath;
@@ -45,6 +55,9 @@ export async function getPostBySlug(slug: string) {
   }
   const fileContents = fs.readFileSync(fullPath, 'utf8');
   const { data: frontmatter, content } = matter(fileContents);
-  const mdxSource = await serialize(content, { scope: frontmatter });
-  return { slug, frontmatter: frontmatter as Record<string, any>, mdxSource };
+  return {
+    slug,
+    frontmatter: frontmatter as PostFrontmatter,
+    body: content,
+  };
 }

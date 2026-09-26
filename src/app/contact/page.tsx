@@ -6,8 +6,8 @@ export default function ContactPage() {
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-bold mb-4">Contact</h1>
         <p className="mb-6 text-gray-700 dark:text-gray-300">
-          I'd love to hear from you — whether it's a question, project idea, or
-          feedback.
+          I&apos;d love to hear from you — whether it&apos;s a question, project
+          idea, or feedback.
         </p>
 
         <section className="mb-8">
