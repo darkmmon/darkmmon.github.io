@@ -32,6 +32,12 @@ const projects: Project[] = [
     url: '#',
   },
   {
+    title: 'Drinking Games',
+    description: 'A party game collection with dice, cards, and quick drinking challenges.',
+    tags: ['Party', 'Games'],
+    url: '/drinking',
+  },
+  {
     title: 'Interactive Portfolio',
     description: "This live portfolio page. It's amazing, right?",
     tags: ['Design', 'UX'],

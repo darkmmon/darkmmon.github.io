@@ -39,6 +39,11 @@ export default function Header() {
               <Text>Blog</Text>
             </Button>
           </Link>
+          <Link href="/drinking">
+            <Button variant="ghost">
+              <Text>Drinking</Text>
+            </Button>
+          </Link>
         </div>
         <div>
           <div className="text-xs dark:text-white text-gray-700">Theme</div>
