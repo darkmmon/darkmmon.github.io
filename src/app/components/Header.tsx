@@ -2,6 +2,7 @@ import ThemeToggle from '../../components/ui/theme-toggle';
 import Button from '../../components/ui/button';
 import Link from 'next/link';
 import Text from '@/components/ui/text';
+
 export default function Header() {
   return (
     <header className="pt-8 pb-8 fixed w-full">
